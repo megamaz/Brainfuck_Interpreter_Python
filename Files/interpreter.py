@@ -1,13 +1,16 @@
-import pathlib, sys
+import sys
 from pathlib import Path
-import os
+
 
 def get_local_path(filename):
-    return Path(__file__).parents[0] / ('brainfucks//' + filename)
+    return Path(__file__).parents[0] / ('Brainfucks/' + filename)
+
 
 # This is how brainfuck works:
-# You have to visualize as if it was just one long row of cells. (30,000 cells) which all start at 0. Each can go up to 255.
-# There is a pointer which points at one of the cells. This is the cell that will be edited. To edit the cell, you use the syntaxes.
+# You have to visualize as if it was just one long row of cells. (30,000 cells) which all start at 0.
+# Each can go up to 255.
+# There is a pointer which points at one of the cells. This is the cell that will be edited.
+# To edit the cell, you use the syntaxes.
 # Brainfuck only has 8 syntax:
 # <     Move the tick one cell to the left
 # >     Move the tick one cell to the right
@@ -22,28 +25,39 @@ def get_local_path(filename):
 def split(word):
     return [char for char in word]
 
-def ReadAndRunFile():
 
-    print("\n\n------------------\nInsert filename")
-    print('''
-Leave blank to exit
-do not include the .bf\n------------------''')
-    brainfuckfile = input("> ")
-    if brainfuckfile == "":
-        print("thanks for coding in brainfuck lmao")
+def getfilename():
+    if len(sys.argv) > 2:  # If the script, a file, and something else was provided, exit with unexpected argument.
+        print(f"Unexpected argument: {sys.argv[2]}")
         sys.exit(0)
-    else:
-        print("\n"*100)
-        
-        print("output:", end=' ')
+    elif len(sys.argv) == 2:  # If the script and a file is provided, assume file being script
+        print(f"Assuming Brainfuck script: {sys.argv[1]}.bf")
+        return sys.argv[1]
+    else:  # If nothing else was provided, ask user for script file
+        print("\n\n------------------\nInsert filename")
+        print('''
+        Leave blank to exit
+        do not include the .bf\n------------------''')
+        brainfuckfile = input("> ")
+        if brainfuckfile == "":
+            print("Exiting...")
+            sys.exit(0)
+        return brainfuckfile
 
-    
-    
-    cells = [0 for x in range(30000)]
+
+def read_and_run_file():
+    cells = [0 for _ in range(30000)]
     tickpos = 0
     try:
         # Grab the file's path
-        filename = get_local_path(brainfuckfile + ".bf")
+        filename = get_local_path(getfilename() + ".bf")
+        if not filename.is_file():
+            print(f"{filename} is not a file!")
+            sys.exit(0)
+
+        # Clear console and print "output: " (no \n)
+        print("\n" * 100)
+        print("output:", end=' ')
 
         # operation
         run = 0
@@ -70,7 +84,7 @@ do not include the .bf\n------------------''')
                         break
                     else:
                         tickpos += 1
-                
+
                 # +- runners
                 if code[run] == '+':
                     if cells[tickpos] == 255:
@@ -83,14 +97,13 @@ do not include the .bf\n------------------''')
                         # sys.exit(0)
                     else:
                         cells[tickpos] -= 1
-                
+
                 # ., runners
                 if code[run] == ".":
                     print(chr(cells[tickpos]), end="")
                     sys.stdout.flush()
                 elif code[run] == ",":
                     cells[tickpos] = ord(input("> ")[0])
-                
 
                 # [] runners.
                 if code[run] == "[":
@@ -98,7 +111,7 @@ do not include the .bf\n------------------''')
                         if b > run:
                             if code[b] == "[":
                                 skips += 1
-                            
+
                             if code[b] == "]":
                                 if skips == 0:
                                     opening.append((run, b))
@@ -108,24 +121,19 @@ do not include the .bf\n------------------''')
                         for a in opening:
                             if a[0] == run:
                                 run = a[1]
-                
+
                 if code[run] == "]":
                     if cells[tickpos] != 0:
                         for a in opening:
                             if a[1] == run:
                                 run = a[0]
-            
-                run += 1          
 
-                
+                run += 1
 
-
-
-
-    # if it fails
+                # if it fails
     except Exception as error:
         print("ERROR: ", end='')
         print(error)
 
-while True:
-    ReadAndRunFile()
+
+read_and_run_file()
