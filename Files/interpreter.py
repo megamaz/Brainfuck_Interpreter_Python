@@ -35,9 +35,7 @@ def getfilename():
         return sys.argv[1]
     else:  # If nothing else was provided, ask user for script file
         print("\n\n------------------\nInsert filename")
-        print('''
-        Leave blank to exit
-        do not include the .bf\n------------------''')
+        print('''Leave blank to exit\ndo not include the .bf\n------------------''')
         brainfuckfile = input("> ")
         if brainfuckfile == "":
             print("Exiting...")
@@ -48,92 +46,83 @@ def getfilename():
 def read_and_run_file():
     cells = [0 for _ in range(30000)]
     tickpos = 0
-    try:
-        # Grab the file's path
-        filename = get_local_path(getfilename() + ".bf")
-        if not filename.is_file():
-            print(f"{filename} is not a file!")
-            sys.exit(0)
+    # Grab the file's path
+    filename = get_local_path(getfilename() + ".bf")
+    if not filename.is_file():
+        print(f"{filename} is not a file!")
+        sys.exit(0)
 
-        # Clear console and print "output: " (no \n)
-        print("\n" * 100)
-        print("output:", end=' ')
+    print("Output:")
 
-        # operation
-        run = 0
-        skips = 0
-        with open(filename, 'r') as brainfuck:
-            code = split(brainfuck.read())
-            # container = brainfuck.read()
-            opening = []
-            while run < len(code):
+    # Starting variables
+    run = 0
+    skips = 0
+    opening = []
 
-                # <> runners
-                if code[run] == "<":
-                    if tickpos == 0:
-                        print("Memory error: Cannot go to -1")
-                        # print(f"(,{run})")
-                        break
-                    else:
-                        tickpos -= 1
-                elif code[run] == ">":
-                    if tickpos == 30000:
-                        print("Memory error: 30000 is limit")
-                        # print(f'Character: {code[run]}')
-                        # sys.exit(0)
-                        break
-                    else:
-                        tickpos += 1
+    with open(filename, 'r') as brainfuck:  # Open the file in read mode
+        code = split(brainfuck.read())  # Split the file into characters
+        while run < len(code):  # While it has not finished running
 
-                # +- runners
-                if code[run] == '+':
-                    if cells[tickpos] == 255:
-                        cells[tickpos] = 0
-                    else:
-                        cells[tickpos] += 1
-                elif code[run] == '-':
-                    if cells[tickpos] == 0:
-                        cells[tickpos] = 255
-                        # sys.exit(0)
-                    else:
-                        cells[tickpos] -= 1
+            # <> runners
+            if code[run] == "<":
+                if tickpos == 0:
+                    print("Memory error: Cannot go to -1")
+                    break
+                else:
+                    tickpos -= 1
+            elif code[run] == ">":
+                if tickpos == 30000:
+                    print("Memory error: 30000 is limit")
+                    break
+                else:
+                    tickpos += 1
 
-                # ., runners
-                if code[run] == ".":
-                    print(chr(cells[tickpos]), end="")
-                    sys.stdout.flush()
-                elif code[run] == ",":
+            # +- runners
+            if code[run] == '+':
+                if cells[tickpos] == 255:
+                    cells[tickpos] = 0
+                else:
+                    cells[tickpos] += 1
+            elif code[run] == '-':
+                if cells[tickpos] == 0:
+                    cells[tickpos] = 255
+                else:
+                    cells[tickpos] -= 1
+
+            # ., runners
+            if code[run] == ".":
+                print(chr(cells[tickpos]), end="")
+                sys.stdout.flush()
+            elif code[run] == ",":
+                try:
                     cells[tickpos] = ord(input("> ")[0])
+                except IndexError:  # The user gave no input
+                    cells[tickpos] = 0
 
-                # [] runners.
-                if code[run] == "[":
-                    for b in range(len(code)):
-                        if b > run:
-                            if code[b] == "[":
-                                skips += 1
+            # [] runners.
+            if code[run] == "[":
+                for b in range(len(code)):
+                    if b > run:
+                        if code[b] == "[":
+                            skips += 1
 
-                            if code[b] == "]":
-                                if skips == 0:
-                                    opening.append((run, b))
-                                else:
-                                    skips -= 1
-                    if cells[tickpos] == 0:
-                        for a in opening:
-                            if a[0] == run:
-                                run = a[1]
+                        if code[b] == "]":
+                            if skips == 0:
+                                opening.append((run, b))
+                            else:
+                                skips -= 1
+                if cells[tickpos] == 0:
+                    for a in opening:
+                        if a[0] == run:
+                            run = a[1]
 
-                if code[run] == "]":
-                    if cells[tickpos] != 0:
-                        for a in opening:
-                            if a[1] == run:
-                                run = a[0]
+            if code[run] == "]":
+                if cells[tickpos] != 0:
+                    for a in opening:
+                        if a[1] == run:
+                            run = a[0]
 
-                run += 1
-
-                # if it fails
-    except Exception as error:
-        print("ERROR: ", end='')
-        print(error)
+            run += 1
 
 
 read_and_run_file()
