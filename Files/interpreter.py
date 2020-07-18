@@ -7,7 +7,7 @@ def get_local_path(filename):
 
 
 # This is how brainfuck works:
-# You have to visualize as if it was just one long row of cells. (30,000 cells) which all start at 0.
+# You have to visualize as if it was just one long row of cells which all start at 0.
 # Each can go up to 255.
 # There is a pointer which points at one of the cells. This is the cell that will be edited.
 # To edit the cell, you use the syntaxes.
@@ -44,7 +44,7 @@ def getfilename():
 
 
 def read_and_run_file():
-    cells = [0 for _ in range(30000)]
+    cells = [0]
     tickpos = 0
     # Grab the file's path
     filename = get_local_path(getfilename() + ".bf")
@@ -71,11 +71,9 @@ def read_and_run_file():
                 else:
                     tickpos -= 1
             elif code[run] == ">":
-                if tickpos == 30000:
-                    print("Memory error: 30000 is limit")
-                    break
-                else:
-                    tickpos += 1
+                if tickpos + 1 > len(cells) - 1:
+                    cells.append(0)
+                tickpos += 1
 
             # +- runners
             if code[run] == '+':
