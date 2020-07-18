@@ -1,3 +1,8 @@
+This code is a copy and paste from this video:
+https://www.youtube.com/watch?v=qK0vmuQib8Y&ab_channel=mitxela
+go watch it it's awesome
+
+
 [-][
   Tic tac toe/naughts-and-crosses AI in brainfuck, written by mitxela
   To play, type a number between 1 and 9 to place an X there.
