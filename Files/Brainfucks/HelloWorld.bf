@@ -38,4 +38,6 @@
 >+++.
 
 Here it is minimized
+To prevent second output from being f*cked we will move a bit to the left and print a new line
+>>>>> +++++ +++++. >>>>>
 ++++++++++++++[>+++++<-]>++.--<++++++[>+++++<-]>+.+++++++..+++.>++++++[>+++++<-]>++.--<+++++++++++[>+++++<-]>++.<<.+++.------.--------.>>> +++++[>++++++<-]>+++.

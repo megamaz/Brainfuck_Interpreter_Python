@@ -17,7 +17,7 @@ import datetime
 # -     Removes 1 to the current cell.
 # And that's about it. Everything else in brainfuck will be read as comments (or just completely ignored.)
 
-# start = 0
+
 def get_local_path(filename):
     return Path(__file__).parents[0] / ('brainfucks//' + filename)
 
@@ -103,7 +103,7 @@ do not include the .bf\n------------------''')
 
                 # [] runners.
                 if code[run] == "[":
-                    for b in range(len(code)):
+                    for b in range(run, len(code)):
                         if b > run:
                             if code[b] == "[":
                                 skips += 1
