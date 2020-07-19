@@ -1,9 +1,7 @@
-import pathlib, sys
+import sys, time
 from pathlib import Path
-import os
+import datetime
 
-def get_local_path(filename):
-    return Path(__file__).parents[0] / ('brainfucks//' + filename)
 
 # This is how brainfuck works:
 # You have to visualize as if it was just one long row of cells. (30,000 cells) which all start at 0. Each can go up to 255.
@@ -19,11 +17,15 @@ def get_local_path(filename):
 # -     Removes 1 to the current cell.
 # And that's about it. Everything else in brainfuck will be read as comments (or just completely ignored.)
 
+# start = 0
+def get_local_path(filename):
+    return Path(__file__).parents[0] / ('brainfucks//' + filename)
+
 def split(word):
     return [char for char in word]
 
 def ReadAndRunFile():
-
+    global start
     print("\n\n------------------\nInsert filename")
     print('''
 Leave blank to exit
@@ -35,23 +37,30 @@ do not include the .bf\n------------------''')
     else:
         print("\n"*100)
         
-        print("output:", end=' ')
+        print("---OUTPUT---")
 
     
+        
     
     cells = [0 for x in range(30000)]
     tickpos = 0
+    run = 0
+    skips = 0
     try:
         # Grab the file's path
         filename = get_local_path(brainfuckfile + ".bf")
 
         # operation
-        run = 0
-        skips = 0
+        
         with open(filename, 'r') as brainfuck:
             code = split(brainfuck.read())
-            # container = brainfuck.read()
+        
+
+        
+
+        
             opening = []
+            start = datetime.datetime.utcnow()
             while run < len(code):
 
                 # <> runners
@@ -128,4 +137,10 @@ do not include the .bf\n------------------''')
         print(error)
 
 while True:
+    
     ReadAndRunFile()
+    print("\n---OUTPUT---")
+
+    end = datetime.datetime.utcnow()
+    print(f'File ran in {end-start}')
+    print('\n' * 2)
