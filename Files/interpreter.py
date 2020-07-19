@@ -4,7 +4,7 @@ import datetime
 
 
 # This is how brainfuck works:
-# You have to visualize as if it was just one long row of cells. (30,000 cells) which all start at 0. Each can go up to 255.
+# You have to visualize as if it was just one long row of cells. (30,000 cells) which all start at 0. Each can go up to 255 (maximum 8-bit value).
 # There is a pointer which points at one of the cells. This is the cell that will be edited. To edit the cell, you use the syntaxes.
 # Brainfuck only has 8 syntax:
 # <     Move the tick one cell to the left
@@ -103,16 +103,15 @@ do not include the .bf\n------------------''')
 
                 # [] runners.
                 if code[run] == "[":
-                    for b in range(run, len(code)):
-                        if b > run:
-                            if code[b] == "[":
-                                skips += 1
-                            
-                            if code[b] == "]":
-                                if skips == 0:
-                                    opening.append((run, b))
-                                else:
-                                    skips -= 1
+                    for b in range(run+1, len(code)):
+                        if code[b] == "[":
+                            skips += 1
+                        
+                        if code[b] == "]":
+                            if skips == 0:
+                                opening.append((run, b))
+                            else:
+                                skips -= 1
                     if cells[tickpos] == 0:
                         for a in opening:
                             if a[0] == run:
