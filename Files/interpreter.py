@@ -66,11 +66,7 @@ do not include the .bf\n------------------''')
             if code == []:
                 print('File is blank.')
                 return
-        
 
-        
-
-        
             opening = []
             while run < len(code):
 
