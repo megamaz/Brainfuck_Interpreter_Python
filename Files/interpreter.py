@@ -52,15 +52,26 @@ do not include the .bf\n------------------''')
 
         # operation
         
+        start = datetime.datetime.utcnow()
         with open(filename, 'r') as brainfuck:
             code = split(brainfuck.read())
+
+            remove = len(code)
+            while remove > 0:
+                if code[remove-1] == '\n':
+                    code.remove(code[remove-1])
+                
+                remove -= 1
+            
+            if code == []:
+                print('File is blank.')
+                return
         
 
         
 
         
             opening = []
-            start = datetime.datetime.utcnow()
             while run < len(code):
 
                 # <> runners
@@ -132,8 +143,7 @@ do not include the .bf\n------------------''')
 
     # if it fails
     except Exception as error:
-        print("ERROR: ", end='')
-        print(error)
+        print(f'ERROR: {error}')
 
 while True:
     
@@ -142,4 +152,3 @@ while True:
 
     end = datetime.datetime.utcnow()
     print(f'File ran in {end-start}')
-    print('\n' * 2)
