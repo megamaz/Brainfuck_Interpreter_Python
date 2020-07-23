@@ -9,6 +9,9 @@ The `run-with-limit.bat` will run the file with a 60sec limit to the code. If yo
 
 Occasional updates to this code will come. Instead of downloading, it would be smarter to just pull this every now and then as to not miss any updates. You can run a few of the example files, such as the [HelloWorld.bf](https://github.com/megamaz/Brainfuck_Interpreter_Python/blob/master/Files/Brainfucks/HelloWorld.bf). 
 
+
+## File Testing
+
 Updates coming to this interpreter are made to improve interpreter speed. [We](https://github.com/coolymike) are currently trying to achieve maximum speed as to make sure that the [mandlebrot.bf](https://github.com/megamaz/Brainfuck_Interpreter_Python/blob/master/Files/Brainfucks/mandlebrot.bf) will run within the 60s time limit. 
 
 Expected output:
