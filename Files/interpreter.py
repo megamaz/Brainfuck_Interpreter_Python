@@ -1,8 +1,10 @@
-import sys, time
+import sys, time, argparse
 from pathlib import Path
 import datetime
 
-
+parser = argparse.ArgumentParser(description="Allows for user time limit")
+parser.add_argument('-l', '--limit', action='store_true',
+                    help='Adds a time limit')
 # This is how brainfuck works:
 # You have to visualize as if it was just one long row of cells. (30,000 cells) which all start at 0. Each can go up to 255 (maximum 8-bit value).
 # There is a pointer which points at one of the cells. This is the cell that will be edited. To edit the cell, you use the syntaxes.
@@ -24,7 +26,7 @@ def get_local_path(filename):
 def split(word):
     return [char for char in word]
 
-def ReadAndRunFile():
+def ReadAndRunFile(IsLimited):
     global start
     print("\n\n------------------\nInsert filename")
     print('''
@@ -58,7 +60,7 @@ do not include the .bf\n------------------''')
 
             remove = len(code)
             while remove > 0:
-                if code[remove-1] == '\n':
+                if code[remove-1] not in "< > [ ] . , + -".split():
                     code.remove(code[remove-1])
                 
                 remove -= 1
@@ -124,11 +126,15 @@ do not include the .bf\n------------------''')
                             if a[0] == run:
                                 run = a[1]
                 
-                if code[run] == "]":
+                elif code[run] == "]":
                     if cells[tickpos] != 0:
                         for a in opening:
                             if a[1] == run:
                                 run = a[0]
+
+                if (datetime.datetime.utcnow() - start).seconds >= 60 and IsLimited:
+                    print("\nProgram took too long to run.")
+                    return
             
                 run += 1          
 
@@ -141,9 +147,10 @@ do not include the .bf\n------------------''')
     except Exception as error:
         print(f'ERROR: {error}')
 
+args = parser.parse_args()
 while True:
     
-    ReadAndRunFile()
+    ReadAndRunFile(args.limit)
     print("\n---OUTPUT---")
 
     end = datetime.datetime.utcnow()
