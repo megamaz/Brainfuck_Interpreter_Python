@@ -1,4 +1,4 @@
 python interpreter.py
 
-pause
+pause 
 exit
