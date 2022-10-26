@@ -5,9 +5,10 @@ Be sure to put put the brainfuck files in the `Brainfucks` folder
 
 ## How to use
 Using it is rather easy. All you really need is to have [Python](https://www.python.org/downloads/) installed. Afterwards, there are **arguments** that can be passed when running the file.
-The `run-with-limit.bat` will run the file with a 60sec limit to the code. If you'd rather be able to have an infinite brainfuck code, instead run the `run.bat`.
+Running the python file with `--limit` will include a 60s time limit. <!--TODO make this be user customizeable and not 60s-->
 
 Occasional updates to this code will come. Instead of downloading, it would be smarter to just pull this every now and then as to not miss any updates. You can run a few of the example files, such as the [HelloWorld.bf](https://github.com/megamaz/Brainfuck_Interpreter_Python/blob/master/Files/Brainfucks/HelloWorld.bf). 
+<!-- Occasional is relative. Last update (at the time of writing this) was over 2 years ago. -->
 
 
 ## File Testing
