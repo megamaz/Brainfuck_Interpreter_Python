@@ -26,7 +26,7 @@ def get_local_path(filename):
 def split(word):
     return [char for char in word]
 
-def ReadAndRunFile(IsLimited):
+def read_and_run_file(IsLimited):
     global start
     print("\n\n------------------\nInsert filename")
     print('''
@@ -38,13 +38,9 @@ do not include the .bf\n------------------''')
         sys.exit(0)
     else:
         print("\n"*100)
-        
         print("---OUTPUT---")
 
-    
-        
-    
-    cells = [0 for x in range(30000)]
+    cells = [0 for _ in range(30000)]
     tickpos = 0
     run = 0
     skips = 0
@@ -53,7 +49,6 @@ do not include the .bf\n------------------''')
         filename = get_local_path(brainfuckfile + ".bf")
 
         # operation
-        
         start = datetime.datetime.utcnow()
         with open(filename, 'r') as brainfuck:
             code = split(brainfuck.read())
@@ -69,7 +64,15 @@ do not include the .bf\n------------------''')
                 print('File is blank.')
                 return
 
-            opening = []
+            bracket_indices = {} # not a set: dict
+            start_indices = [] # treated as a stack
+            for x in range(len(code)):
+                if code[x] == "[":
+                    start_indices.append(x)
+                elif code[x] == "]":
+                    val = start_indices.pop(-1)
+                    bracket_indices[x] = val
+                    bracket_indices[val] = x
             while run < len(code):
 
                 # <> runners
@@ -112,36 +115,17 @@ do not include the .bf\n------------------''')
 
                 # [] runners.
                 if code[run] == "[":
-                    for b in range(run+1, len(code)):
-                        if code[b] == "[":
-                            skips += 1
-                        
-                        if code[b] == "]":
-                            if skips == 0:
-                                opening.append((run, b))
-                            else:
-                                skips -= 1
                     if cells[tickpos] == 0:
-                        for a in opening:
-                            if a[0] == run:
-                                run = a[1]
-                
+                        run = bracket_indices[run]
                 elif code[run] == "]":
                     if cells[tickpos] != 0:
-                        for a in opening:
-                            if a[1] == run:
-                                run = a[0]
+                        run = bracket_indices[run]
 
                 if (datetime.datetime.utcnow() - start).seconds >= 60 and IsLimited:
                     print("\nProgram took too long to run.")
                     return
             
-                run += 1          
-
-                
-
-
-
+                run += 1
 
     # if it fails
     except Exception as error:
@@ -150,7 +134,7 @@ do not include the .bf\n------------------''')
 args = parser.parse_args()
 while True:
     
-    ReadAndRunFile(args.limit)
+    read_and_run_file(args.limit)
     print("\n---OUTPUT---")
 
     end = datetime.datetime.utcnow()
