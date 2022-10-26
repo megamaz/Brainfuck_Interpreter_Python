@@ -40,7 +40,7 @@ do not include the .bf\n------------------''')
         print("\n"*100)
         print("---OUTPUT---")
 
-    cells = [0 for _ in range(30000)]
+    cells = [0]
     tickpos = 0
     run = 0
     skips = 0
@@ -84,13 +84,9 @@ do not include the .bf\n------------------''')
                     else:
                         tickpos -= 1
                 elif code[run] == ">":
-                    if tickpos == 30000:
-                        print("Memory error: 30000 is limit")
-                        # print(f'Character: {code[run]}')
-                        # sys.exit(0)
-                        break
-                    else:
-                        tickpos += 1
+                    tickpos += 1
+                    if tickpos == len(cells):
+                        cells.append(0)
                 
                 # +- runners
                 if code[run] == '+':
