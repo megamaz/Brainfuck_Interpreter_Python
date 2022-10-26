@@ -14,7 +14,7 @@ Occasional updates to this code will come. Instead of downloading, it would be s
 
 Updates coming to this interpreter are made to improve interpreter speed. [We](https://github.com/coolymike) are currently trying to achieve maximum speed as to make sure that the [mandlebrot.bf](https://github.com/megamaz/Brainfuck_Interpreter_Python/blob/master/Files/Brainfucks/mandlebrot.bf) will run within the 60s time limit. 
 
-Preferably, the entire mandlebrot set would be printed to the console before the 60s are finished. Below are the current outputs.
+Preferably, the entire mandlebrot set would be printed to the console before the 60s are finished. Below are the current outputs.\
 Current output (as of Python 3.10.4):
 ```
 AAAAAAAAAAAAAAAABBBBBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCDDDDDDDDDEGFFEEEEDDDDDDCCCCCCCCCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
