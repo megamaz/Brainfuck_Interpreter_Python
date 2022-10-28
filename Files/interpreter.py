@@ -94,41 +94,40 @@ do not include the .bf\n------------------''')
                     bracket_indices[val] = x
             while run < len(code):
 
-                # <> runners
-                if code[run].startswith("<"):
-                    tickpos -= len(code[run])
-                    if tickpos < 0:
-                        print("Memory error: Cannot go below 0")
-                        # print(f"(,{run})")
-                        break
-                elif code[run].startswith(">"):
-                    tickpos += len(code[run])
-                    while tickpos >= len(cells):
-                        cells.append(0)
-                
-                # +- runners
-                if code[run].startswith("+"):
-                    cells[tickpos] += len(code[run])
-                    cells[tickpos] %= 256
-                elif code[run].startswith("-"):
-                    cells[tickpos] -= len(code[run])
-                    cells[tickpos] %= 256 # negative modulo 256 will always be [0, 256]
-                
-                # ., runners
-                if code[run] == ".":
-                    print(chr(cells[tickpos]), end="")
-                    sys.stdout.flush()
-                elif code[run] == ",":
-                    cells[tickpos] = ord(input("> ")[0])
-                
-
-                # [] runners.
-                if code[run] == "[":
-                    if cells[tickpos] == 0:
-                        run = bracket_indices[run]
-                elif code[run] == "]":
-                    if cells[tickpos] != 0:
-                        run = bracket_indices[run]
+                match code[run][0]:
+                    case "<":
+                        tickpos -= len(code[run])
+                        if tickpos < 0:
+                            print("Memory error: Cannot go below 0")
+                            # print(f"(,{run})")
+                            break
+                    case ">":
+                        tickpos += len(code[run])
+                        while tickpos >= len(cells):
+                            cells.append(0)
+                    
+                    # +- runners
+                    case "+":
+                        cells[tickpos] += len(code[run])
+                        cells[tickpos] %= 256
+                    case "-":
+                        cells[tickpos] -= len(code[run])
+                        cells[tickpos] %= 256 # negative modulo 256 will always be [0, 256]
+                    
+                    # ., runners
+                    case ".":
+                        print(chr(cells[tickpos]), end="")
+                        sys.stdout.flush()
+                    case ",":
+                        cells[tickpos] = ord(input("> ")[0])
+                    
+                    # [] runners.
+                    case "[":
+                        if cells[tickpos] == 0:
+                            run = bracket_indices[run]
+                    case "]":
+                        if cells[tickpos] != 0:
+                            run = bracket_indices[run]
 
                 if (datetime.datetime.utcnow() - start).seconds >= 60 and IsLimited:
                     print("\nProgram took too long to run.")
