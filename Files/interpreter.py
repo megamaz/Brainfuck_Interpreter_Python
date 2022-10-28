@@ -43,7 +43,6 @@ do not include the .bf\n------------------''')
     cells = [0]
     tickpos = 0
     run = 0
-    skips = 0
     try:
         # Grab the file's path
         filename = get_local_path(brainfuckfile + ".bf")
@@ -55,7 +54,7 @@ do not include the .bf\n------------------''')
 
             remove = len(code)
             while remove > 0:
-                if code[remove-1] not in "< > [ ] . , + -".split():
+                if code[remove-1] not in "<>[].,+-":
                     code.remove(code[remove-1])
                 
                 remove -= 1
@@ -63,6 +62,26 @@ do not include the .bf\n------------------''')
             if code == []:
                 print('File is blank.')
                 return
+
+            current = ""
+            final_code = []
+            for l in code:
+                if not l in "><+-":
+                    if current != "":
+                        final_code.append(current)
+                        current = ""
+                    final_code.append(l)
+                else:
+                    if current == "":
+                        current += l
+                    else:
+                        if l != current[-1]:
+                            final_code.append(current)
+                            current = l
+                        else:
+                            current += l
+            assert ''.join(code) == ''.join(final_code), "code does not match condensed code"
+            code:list[str] = final_code
 
             bracket_indices = {} # not a set: dict
             start_indices = [] # treated as a stack
@@ -76,30 +95,24 @@ do not include the .bf\n------------------''')
             while run < len(code):
 
                 # <> runners
-                if code[run] == "<":
-                    if tickpos == 0:
-                        print("Memory error: Cannot go to -1")
+                if code[run].startswith("<"):
+                    tickpos -= len(code[run])
+                    if tickpos < 0:
+                        print("Memory error: Cannot go below 0")
                         # print(f"(,{run})")
                         break
-                    else:
-                        tickpos -= 1
-                elif code[run] == ">":
-                    tickpos += 1
-                    if tickpos == len(cells):
+                elif code[run].startswith(">"):
+                    tickpos += len(code[run])
+                    while tickpos >= len(cells):
                         cells.append(0)
                 
                 # +- runners
-                if code[run] == '+':
-                    if cells[tickpos] == 255:
-                        cells[tickpos] = 0
-                    else:
-                        cells[tickpos] += 1
-                elif code[run] == '-':
-                    if cells[tickpos] == 0:
-                        cells[tickpos] = 255
-                        # sys.exit(0)
-                    else:
-                        cells[tickpos] -= 1
+                if code[run].startswith("+"):
+                    cells[tickpos] += len(code[run])
+                    cells[tickpos] %= 256
+                elif code[run].startswith("-"):
+                    cells[tickpos] -= len(code[run])
+                    cells[tickpos] %= 256 # negative modulo 256 will always be [0, 256]
                 
                 # ., runners
                 if code[run] == ".":
