@@ -28,4 +28,5 @@ AAAAAAAAAABBBBBBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDEEEEEEFFGHIJKS
 AAAAAAAAABBBBBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDEEEEEEFFGQPUVOTY
 ```
 
-This may not seem like much compared to the expected output of the full mandlebrot set, however it is a large improvement from the short `AAAAA` that was outputed by the original version.
+This may not seem like much compared to the expected output of the full mandlebrot set, however it is a large improvement from the short `AAAAA` that was outputed by the original version.\
+As comparison, the full mandlebrot set (without timelimit) can be printed to the console in a little over 23 minutes. This is incredibly slow, so I'm looking to speed it up.
