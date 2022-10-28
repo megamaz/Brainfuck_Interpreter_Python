@@ -1,5 +1,5 @@
 # Brainfuck interpreter in Python
-Does what it says, inteprets brainfuck using Python.
+Does what it says, inteprets brainfuck using Python. This is unverified information (kinda), but afaik this is the fastest Python Interpreter for Brainfuck that exists on GitHub. If you have an interpreter that you think is faster, open an issue and I'll look into it. Use 23.12 minutes on the `mandlebrot.bf` as a baseline to see which is faster.
 
 Be sure to put put the brainfuck files in the `Brainfucks` folder
 
